@@ -1,3 +1,6 @@
 [submodule "libs/directus-cms-collections"]
 	path = libs/directus-cms-collections
 	url = https://github.com/copa-airlines-digital-marketing/directus-cms-collections
+[submodule "libs/design-system"]
+	path = libs/design-system
+	url = https://github.com/copa-airlines-digital-marketing/design-sytem-svelte-components

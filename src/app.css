@@ -1,7 +1,5 @@
 @import 'tailwindcss';
+@import '../libs/design-system/tailwind-presets/v4/theme.css';
 
-@theme {
-	--color-primary: #003082;
-	--color-primary-dark: #001e52;
-	--color-secondary: #c99700;
-}
+@source './**/*.{html,js,svelte,ts}';
+@source '../libs/design-system/dist/**/*.{svelte,js}';

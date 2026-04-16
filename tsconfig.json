@@ -6,7 +6,10 @@
 			"$lib/*": ["./src/lib/*"],
 			"$app/types": ["./.svelte-kit/types/index.d.ts"],
 			"$directus": ["./libs/directus-cms-collections/src"],
-			"$directus/*": ["./libs/directus-cms-collections/src/*"]
+			"$directus/*": ["./libs/directus-cms-collections/src/*"],
+			"design-sytem-svelte-components/typography": [
+				"./libs/design-system/dist/components/typography/index.js"
+			]
 		},
 		"rewriteRelativeImportExtensions": true,
 		"allowJs": true,

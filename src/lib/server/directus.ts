@@ -11,10 +11,14 @@ type DirectusListResponse<T> = { data: T[] };
 // During build-time prerender (entries()), fall back to process.env so the same
 // module works in both phases without needing separate imports.
 function getDirectusUrl(): string {
-	return env.DIRECTUS_URL ?? (process.env['DIRECTUS_URL'] as string) ?? '';
+	const val = env.DIRECTUS_URL ?? process.env['DIRECTUS_URL'];
+	if (!val) throw new Error('[directus] DIRECTUS_URL is not set in environment variables.');
+	return val;
 }
 function getDirectusToken(): string {
-	return env.DIRECTUS_TOKEN ?? (process.env['DIRECTUS_TOKEN'] as string) ?? '';
+	const val = env.DIRECTUS_TOKEN ?? process.env['DIRECTUS_TOKEN'];
+	if (!val) throw new Error('[directus] DIRECTUS_TOKEN is not set in environment variables.');
+	return val;
 }
 
 function collectionUrl(search: Record<string, string>): string {

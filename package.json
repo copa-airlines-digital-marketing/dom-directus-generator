@@ -6,7 +6,7 @@
 	"scripts": {
 		"dev": "vite dev",
 		"build": "git submodule update --init --recursive && vite build",
-		"deploy": "pnpm build && wrangler deploy",
+		"deploy": "pnpm build && npx wrangler deploy",
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync || echo ''",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",

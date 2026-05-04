@@ -7,8 +7,18 @@ const FIELDS =
 
 type DirectusListResponse<T> = { data: T[] };
 
+// $env/dynamic/private is only populated at request runtime (Cloudflare Worker context).
+// During build-time prerender (entries()), fall back to process.env so the same
+// module works in both phases without needing separate imports.
+function getDirectusUrl(): string {
+	return env.DIRECTUS_URL ?? (process.env['DIRECTUS_URL'] as string) ?? '';
+}
+function getDirectusToken(): string {
+	return env.DIRECTUS_TOKEN ?? (process.env['DIRECTUS_TOKEN'] as string) ?? '';
+}
+
 function collectionUrl(search: Record<string, string>): string {
-	const base = env.DIRECTUS_URL.replace(/\/$/, '');
+	const base = getDirectusUrl().replace(/\/$/, '');
 	const url = new URL(`${base}${COLLECTION_PATH}`);
 	for (const [key, value] of Object.entries(search)) {
 		url.searchParams.set(key, value);
@@ -23,7 +33,7 @@ async function fetchItems(search: Record<string, string>): Promise<Item_Destinat
 	};
 
 	const response = await fetch(collectionUrl(query), {
-		headers: { Authorization: `Bearer ${env.DIRECTUS_TOKEN}` },
+		headers: { Authorization: `Bearer ${getDirectusToken()}` },
 	});
 
 	if (!response.ok) {

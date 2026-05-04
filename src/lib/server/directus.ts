@@ -1,4 +1,4 @@
-import { DIRECTUS_TOKEN, DIRECTUS_URL } from '$env/static/private';
+import { env } from '$env/dynamic/private';
 import type { Item_DestinationOfTheMonth } from '$directus/generated/collections/destination-of-the-month';
 
 const COLLECTION_PATH = '/items/destination_of_the_month';
@@ -8,7 +8,7 @@ const FIELDS =
 type DirectusListResponse<T> = { data: T[] };
 
 function collectionUrl(search: Record<string, string>): string {
-	const base = DIRECTUS_URL.replace(/\/$/, '');
+	const base = env.DIRECTUS_URL.replace(/\/$/, '');
 	const url = new URL(`${base}${COLLECTION_PATH}`);
 	for (const [key, value] of Object.entries(search)) {
 		url.searchParams.set(key, value);
@@ -23,7 +23,7 @@ async function fetchItems(search: Record<string, string>): Promise<Item_Destinat
 	};
 
 	const response = await fetch(collectionUrl(query), {
-		headers: { Authorization: `Bearer ${DIRECTUS_TOKEN}` },
+		headers: { Authorization: `Bearer ${env.DIRECTUS_TOKEN}` },
 	});
 
 	if (!response.ok) {

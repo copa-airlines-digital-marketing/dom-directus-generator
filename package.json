@@ -5,7 +5,7 @@
 	"type": "module",
 	"scripts": {
 		"dev": "vite dev",
-		"build": "git submodule update --init --recursive && vite build",
+		"build": "git submodule update --init --recursive && vite build && echo _worker.js > .svelte-kit/cloudflare/.assetsignore",
 		"deploy": "pnpm build && npx wrangler deploy",
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync || echo ''",

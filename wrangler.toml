@@ -6,6 +6,7 @@ main = ".svelte-kit/cloudflare/_worker.js"
 
 [assets]
 directory = ".svelte-kit/cloudflare"
+binding = "ASSETS"
 
 [vars]
 DIRECTUS_URL = "https://cm-marketing.directus.app"

@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { Body, Caption, Heading } from 'design-sytem-svelte-components/typography';
-
 	type Lang = 'es' | 'en' | 'pt';
 
 	const STRINGS: Record<Lang, { heading: string; bookLabel: string; flyLabel: string }> = {
@@ -46,7 +45,7 @@
 		<div class="absolute -bottom-4 -right-4 h-32 w-32 rounded-full bg-secondary/5 blur-2xl"></div>
 		<div class="relative">
 			<Heading tag="h2" variant="h2" class="mb-8 text-center">
-				{strings.heading} <br />
+				{strings.heading}
 				<span class="relative inline-block">
 					<span class="relative z-10 text-secondary">{destination}</span>
 					<span class="absolute -bottom-2 left-0 right-0 h-3 -rotate-1 bg-secondary"></span>
@@ -59,21 +58,16 @@
 					<div class="relative">
 						<Caption
 							tag="p"
-							size="caption"
+							size="caption-small"
 							variant="caption"
-							class="mb-2 text-center font-semibold !text-primary-dark"
+							class="mb-2 text-center font-semibold !text-primary"
 						>
 							{strings.bookLabel}
 						</Caption>
-						<Body
-							tag="p"
-							size="body-large"
-							variant="body-emphasis"
-							class="text-center text-u2 font-body font-bold tabular-nums lining-nums !text-primary !mb-0"
-						>
+						<Heading tag="h3" variant="h2" class="mb-2 text-center">
 							{bookLimitDate}
 							{bookLimitYear}
-						</Body>
+						</Heading>
 					</div>
 				</div>
 				<div
@@ -82,21 +76,16 @@
 					<div class="relative">
 						<Caption
 							tag="p"
-							size="caption"
+							size="caption-small"
 							variant="caption"
-							class="mb-2 text-center font-semibold !text-primary-dark"
+							class="mb-2 text-center font-semibold !text-primary"
 						>
 							{strings.flyLabel}
 						</Caption>
-						<Body
-							tag="p"
-							size="body-large"
-							variant="body-emphasis"
-							class="text-center text-u2 font-body font-bold tabular-nums lining-nums !text-primary !mb-0"
-						>
+						<Heading tag="h3" variant="h2" class="mb-2 text-center">
 							{flyLimitDate}
 							{flyLimitYear}
-						</Body>
+						</Heading>
 					</div>
 				</div>
 			</div>

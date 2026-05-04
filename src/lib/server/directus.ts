@@ -71,3 +71,15 @@ export async function getPublishedDestination(
 export async function getAllPublishedDestinations(): Promise<Item_DestinationOfTheMonth[]> {
 	return fetchItems({ 'filter[status][_eq]': 'published' });
 }
+
+/** Returns the published destination that matches a given slug, with a translation for the given language. */
+export async function getDestinationBySlug(
+	slug: string,
+	lang: 'es' | 'en' | 'pt',
+): Promise<Item_DestinationOfTheMonth | undefined> {
+	const items = await fetchItems({
+		'filter[status][_eq]': 'published',
+		'filter[destination_slug][_eq]': slug,
+	});
+	return items.find((item) => itemHasTranslation(item, lang));
+}

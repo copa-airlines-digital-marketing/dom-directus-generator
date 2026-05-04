@@ -3,3 +3,19 @@
 
 @source './**/*.{html,js,svelte,ts}';
 @source '../libs/design-system/dist/**/*.{svelte,js}';
+
+@font-face {
+  font-family: 'Gilroy';
+  src: url('https://cm-marketing.directus.app/assets/b83d2dc4-5a3d-4517-b367-fde7b500f806');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gilroy';
+  src: url('https://cm-marketing.directus.app/assets/40e07d67-0561-4423-8cd7-6d6b4f5286b6');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}

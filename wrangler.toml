@@ -1,4 +1,5 @@
 name = "dom-directus-generator"
+account_id = "af7a7443fe6614fe0638319e5943ce4b"
 compatibility_date = "2025-01-01"
 compatibility_flags = ["nodejs_compat"]
 pages_build_output_dir = ".svelte-kit/cloudflare"

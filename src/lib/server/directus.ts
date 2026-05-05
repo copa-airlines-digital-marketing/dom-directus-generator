@@ -5,6 +5,51 @@ const COLLECTION_PATH = '/items/destination_of_the_month';
 const FIELDS =
 	'*,translations.*,destination_of_the_month_cards.*,destination_of_the_month_cards.translations.*';
 
+/**
+ * Static tokens often cannot read `directus_files`, so `main_image` stays a UUID string and
+ * nested `main_image.type` is never returned. Public `/assets/:id` still exposes `Content-Type`
+ * (e.g. video/webm) — use a light HEAD to decide image vs video for the hero.
+ */
+function assetProbeUrl(fileId: string): string {
+	const base = getDirectusUrl().replace(/\/$/, '');
+	return `${base}/assets/${fileId}`;
+}
+
+async function probeAssetContentType(fileId: string): Promise<string | undefined> {
+	const url = assetProbeUrl(fileId);
+	try {
+		let res = await fetch(url, { method: 'HEAD' });
+		if (res.ok) {
+			const ct = res.headers.get('content-type')?.split(';')[0]?.trim();
+			if (ct) return ct;
+		}
+		// Some hosts disallow HEAD; single-byte GET is enough for Content-Type.
+		res = await fetch(url, { headers: { Range: 'bytes=0-0' } });
+		if (res.ok || res.status === 206) {
+			return res.headers.get('content-type')?.split(';')[0]?.trim();
+		}
+	} catch {
+		// ignore
+	}
+	return undefined;
+}
+
+async function withResolvedMainImage(
+	item: Item_DestinationOfTheMonth,
+): Promise<Item_DestinationOfTheMonth> {
+	const main = item.main_image;
+	if (typeof main !== 'string' || !main.trim()) return item;
+
+	const type = await probeAssetContentType(main.trim());
+	if (!type) return item;
+
+	return {
+		...item,
+		// Runtime shape for pages: `{ id, type }` matches Directus file expansion + `parseMainImageField`.
+		main_image: { id: main.trim(), type } as Item_DestinationOfTheMonth['main_image']
+	};
+}
+
 type DirectusListResponse<T> = { data: T[] };
 
 // $env/dynamic/private is only populated at request runtime (Cloudflare Worker context).
@@ -46,7 +91,8 @@ async function fetchItems(search: Record<string, string>): Promise<Item_Destinat
 	}
 
 	const json = (await response.json()) as DirectusListResponse<Item_DestinationOfTheMonth>;
-	return json.data ?? [];
+	const rows = json.data ?? [];
+	return Promise.all(rows.map((item) => withResolvedMainImage(item)));
 }
 
 function itemHasTranslation(item: Item_DestinationOfTheMonth, lang: 'es' | 'en' | 'pt'): boolean {

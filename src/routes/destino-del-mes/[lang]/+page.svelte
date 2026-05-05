@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/state';
 	import FareIntro from '$lib/components/FareIntro.svelte';
+	import HeroMainMedia from '$lib/components/HeroMainMedia.svelte';
 	import { Body, Heading } from 'design-sytem-svelte-components/typography';
 	import type { PageData } from './$types';
 
@@ -90,19 +91,10 @@
 {#if translation}
 	<div class="min-h-screen bg-grey-50 antialiased">
 		<section class="relative h-[min(24vh,32rem)] min-h-[18rem] w-full overflow-hidden bg-slate-900">
-			{#if data.destination.main_image}
-				<img
-					src="{ASSETS_BASE}/{data.destination.main_image}"
-					alt={translation.intro_title ?? ''}
-					class="h-full w-full object-cover object-center"
-				/>
-			{:else}
-				<div
-					class="flex h-full min-h-48 w-full items-center justify-center bg-slate-800 text-slate-400"
-				>
-					<Body tag="span" size="body-small" variant="body-invert" class="mb-0">—</Body>
-				</div>
-			{/if}
+			<HeroMainMedia
+				mainImage={data.destination.main_image}
+				title={translation.intro_title ?? ''}
+			/>
 			<div
 				class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent"
 			></div>

@@ -1,0 +1,54 @@
+# Despliega el Worker (SvelteKit + adapter-cloudflare) en cada push a `main`.
+#
+# Secrets en GitHub → Settings → Secrets and variables → Actions:
+#   CLOUDFLARE_API_TOKEN  — API Token con permiso de editar Workers (p. ej. "Edit Cloudflare Workers").
+#   DIRECTUS_TOKEN        — Token de Directus para el prerender (fetch en build).
+#
+# Si el submódulo es privado, añade también SUBMODULE_CHECKOUT_TOKEN (PAT con acceso al repo del submódulo)
+# y descomenta la línea `token:` en el checkout.
+
+name: Deploy Cloudflare Worker
+
+on:
+  push:
+    branches: [main]
+
+concurrency:
+  group: deploy-cloudflare-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          # token: ${{ secrets.SUBMODULE_CHECKOUT_TOKEN }}
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Install Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build and deploy
+        run: pnpm run deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          # Misma URL que en wrangler.toml; cámbiala aquí si usas otro entorno.
+          DIRECTUS_URL: https://cm-marketing.directus.app
+          DIRECTUS_TOKEN: ${{ secrets.DIRECTUS_TOKEN }}
